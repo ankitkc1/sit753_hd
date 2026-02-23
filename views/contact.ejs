@@ -1,0 +1,29 @@
+<%- include('./partial/header.ejs') %>
+
+<body>
+
+
+<%- include('./partial/nav.ejs') %>
+
+  <section class="contact">
+    <h1>Get in Touch</h1>
+    <p class="subtitle">I’d love to connect with you. Feel free to drop a message.</p>
+
+    <form class="contact-form" action="mailto:ankcproject0@gmail.com" method="post" enctype="text/plain">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+
+    <div class="contact-info">
+      <p>Email: <a target="_blank" rel="noopener noreferrer" href="mailto:ankcproject0@gmail.com">ankcproject0@gmail.com</a></p>
+      <p>LinkedIn: <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/ankitkc1/">linkedin.com/in/ankitkc1</a></p>
+      <p>GitHub: <a target="_blank" rel="noopener noreferrer" href="https://github.com/ankitkc1">github.com/ankitkc1</a></p>
+      <p> OrcID: <a target="_blank" rel="noopener noreferrer" href="https://orcid.org/0009-0006-8755-0081">orcid.org/0009-0006-8755-0081</a></p>
+    </div>
+  </section>
+
+<%- include('./partial/footer.ejs') %>
+
+</body>

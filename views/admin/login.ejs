@@ -1,0 +1,16 @@
+<%- include('../partial/header', { activePage: '' }) %>
+
+<section class="admin-wrap">
+  <div class="admin-card card">
+    <h1>Admin Login</h1>
+    <% if (error) { %><p class="admin-error"><%= error %></p><% } %>
+
+    <form method="POST" action="/onlyankit/login" class="admin-form">
+      <input name="username" placeholder="Username" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <button class="btn" type="submit">Login</button>
+    </form>
+  </div>
+</section>
+
+<%- include('../partial/footer') %>

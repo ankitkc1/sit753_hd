@@ -1,0 +1,194 @@
+<%- include('../partial/header', { activePage: '' }) %>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script>
+
+<style>
+  /* Admin page fixes only */
+  .admin-form input[type="hidden"] {
+    display: none !important;
+  }
+
+  .admin-form input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    accent-color: var(--ink);
+  }
+
+  .admin-form .checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    width: fit-content;
+    padding: .55rem .7rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--soft);
+    color: var(--ink);
+  }
+
+  .editor {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .ql-toolbar.ql-snow {
+    border: none !important;
+    border-bottom: 1px solid var(--line) !important;
+    background: var(--soft) !important;
+  }
+
+  .ql-container.ql-snow {
+    border: none !important;
+    min-height: 260px;
+    background: #fff !important;
+  }
+
+  .ql-editor {
+    min-height: 260px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.65;
+  }
+
+  .ql-editor.ql-blank::before {
+    color: #8a8f98 !important;
+    font-style: normal !important;
+  }
+</style>
+
+<section class="admin-wrap">
+  <div class="admin-card card">
+    <h1><%= mode === 'create' ? 'New Blog' : 'Edit Blog' %></h1>
+    <% if (error) { %>
+      <p class="admin-error"><%= error %></p>
+    <% } %>
+
+    <form
+      method="POST"
+      action="<%= mode === 'create' ? '/onlyankit/new' : ('/onlyankit/edit/' + blog._id) %>"
+      class="admin-form"
+      enctype="multipart/form-data"
+    >
+      <label>Title</label>
+      <input
+        type="text"
+        name="title"
+        placeholder="Title"
+        value="<%= blog?.title || '' %>"
+        required
+      />
+
+      <label>Excerpt</label>
+      <textarea
+        name="excerpt"
+        rows="3"
+        placeholder="Short excerpt (optional)"
+      ><%= blog?.excerpt || '' %></textarea>
+
+      <label>Upload cover image</label>
+      <input
+        type="file"
+        name="coverImage"
+        accept="image/*"
+      />
+
+      <label>Cover image URL (optional)</label>
+      <input
+        type="url"
+        name="coverImageUrl"
+        placeholder="https://..."
+        value="<%= blog?.coverImageUrl || '' %>"
+      />
+
+      <% if (blog?.coverImageUrl) { %>
+        <p class="muted">Current image:</p>
+        <img src="<%= blog.coverImageUrl %>" class="thumb" alt="Current cover" />
+      <% } %>
+
+      <label>Categories (comma separated)</label>
+      <input
+        type="text"
+        name="categories"
+        placeholder="e.g. Tech, Coding, News"
+        value="<%= (blog?.categories || []).join(', ') %>"
+      />
+
+      <label>Content</label>
+
+      <div id="existingHtml" style="display:none;"><%- blog?.contentHtml || '' %></div>
+      <div id="editor" class="editor"></div>
+
+      <input type="hidden" name="contentHtml" id="contentHtml" />
+      <input type="hidden" name="published" value="false" />
+
+      <label class="checkbox">
+        <input
+          type="checkbox"
+          name="published"
+          value="true"
+          <%= blog?.published !== false ? 'checked' : '' %>
+        />
+        Published
+      </label>
+
+      <div class="admin-actions">
+        <button class="btn" type="submit"><%= mode === 'create' ? 'Publish' : 'Save' %></button>
+        <a class="btn btn-ghost" href="/onlyankit">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const editorEl = document.getElementById("editor");
+    const hidden = document.getElementById("contentHtml");
+    const existing = document.getElementById("existingHtml");
+
+    if (!editorEl || !hidden) return;
+
+    if (typeof Quill === "undefined") {
+      editorEl.innerHTML = "<div style='padding:12px;color:#b91c1c;font-weight:600'>Quill failed to load.</div>";
+      return;
+    }
+
+    const quill = new Quill(editorEl, {
+      theme: "snow",
+      placeholder: "Write your blog content here...",
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["link", "image", "blockquote", "code-block"],
+          ["clean"]
+        ]
+      }
+    });
+
+    if (existing && existing.innerHTML.trim()) {
+      quill.root.innerHTML = existing.innerHTML;
+    }
+
+    hidden.value = quill.root.innerHTML;
+
+    quill.on("text-change", function () {
+      hidden.value = quill.root.innerHTML;
+    });
+
+    const form = document.querySelector(".admin-form");
+    if (form) {
+      form.addEventListener("submit", function () {
+        hidden.value = quill.root.innerHTML;
+      });
+    }
+  });
+</script>
+
+<%- include('../partial/footer') %>

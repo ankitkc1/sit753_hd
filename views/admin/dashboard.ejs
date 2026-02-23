@@ -1,0 +1,36 @@
+<%- include('../partial/header', { activePage: '' }) %>
+
+<section class="admin-wrap">
+  <div class="admin-top">
+    <h1>Admin Dashboard</h1>
+    <div class="admin-actions">
+      <a class="btn" href="/onlyankit/new">+ New Blog</a>
+      <form method="POST" action="/onlyankit/logout">
+        <button class="btn btn-ghost" type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-list">
+    <% blogs.forEach(b => { %>
+      <div class="admin-row card">
+        <div>
+          <h3><%= b.title %></h3>
+          <p class="blog-meta">
+            <%= new Date(b.createdAt).toLocaleDateString() %> •
+            <%= b.published ? 'Published' : 'Draft' %>
+          </p>
+        </div>
+
+        <div class="admin-row-actions">
+          <a class="btn-sm" href="/onlyankit/edit/<%= b._id %>">Edit</a>
+          <form method="POST" action="/onlyankit/delete/<%= b._id %>?_method=DELETE">
+            <button class="btn-sm btn-danger" type="submit">Delete</button>
+          </form>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<%- include('../partial/footer') %>

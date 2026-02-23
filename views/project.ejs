@@ -1,0 +1,70 @@
+<%- include('./partial/header.ejs') %>
+
+<body>
+
+
+<%- include('./partial/nav.ejs') %>
+
+ <section class="projects">
+    <h1>My Projects</h1>
+    <p class="subtitle">A collection of my research and development work.</p>
+
+    <div class="project-grid">
+
+      <!-- Project Card 1 -->
+      <div class="project-card">
+        <h2>We Talk</h2>
+        <p>
+          WeTalk was born from my frustration. I watched as messaging apps became cluttered playgrounds— endless stories, shopping tabs, games, filters, and features that buried the simple act of conversation under layers of digital noise.
+          Key Features:
+        </p>
+        <ul>
+          <li>Private & Public Rooms </li>
+          <li>Real-time Chat </li>
+          <li>Secure Conversations </li>
+          <li>Modern Glass UI </li>
+        </ul>
+        <div class="tags">
+          <span>Node.js</span><span>Express.js</span><span>Socket.IO</span><span>JavaScript</span><span>MongoDB</span>
+        </div>
+        <div class="links">
+          <a target="_blank" rel="noopener noreferrer" href="https://we-talk-5l3l.onrender.com/login" class="btn-sm">Go Live</a>
+        </div>
+      </div>
+
+      <!-- Project Card 2 -->
+      <div class="project-card">
+        <h2>CAS: Blockchain Based Certificate Authentication System</h2>
+        <p>
+          Developed a DApp where each certificate is digitized and stored as a unique, cryptographically hashed
+      record in a blockchain network. The platform features a user-friendly interface for certificate issuers and
+ for verifiers to easily authenticate credentials.
+        </p>
+        <div class="tags">
+          <span>Blockchain</span><span>Solidity</span><span>Web3.js</span><span>Smart Contracts</span>
+        </div>
+        <div class="links">
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/ankitkc1/CAS" class="btn-sm">GitHub</a>
+          <a target="_blank" rel="noopener noreferrer" href="https://drive.google.com/file/d/1_Y0rvsja0MjZRJNaFY0KflGpPJbQUOzG/view?usp=sharing" class="btn-sm">Read Full Thesis</a>
+        </div>
+      </div>
+
+      <!-- Project Card 3 -->
+      <div class="project-card">
+        <h2>FuelFlow – Java-based Gas Station Simulation</h2>
+        <p>
+          Built a Java simulation system modeling vehicles, queues, pumps, and time-driven events to analyze gas station performance and congestion.Applied object-oriented design principles and used Maven for dependency and build management.
+        </p>
+        <div class="tags">
+          <span>Java</span><span>OOP</span><span>Maven</span><span>Simulation Modelling</span>
+        </div>
+        <div class="links">
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/ankitkc1/simulating-gas-station" class="btn-sm">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<%- include('./partial/footer.ejs') %>
+
+</body>

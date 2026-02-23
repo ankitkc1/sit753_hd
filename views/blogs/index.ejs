@@ -1,0 +1,69 @@
+<%- include('../partial/header', { activePage }) %>
+<body>
+<%- include('../partial/nav') %>
+<section class="blog-page">
+  <div class="blog-header">
+    <h1>Blogs</h1>
+    <p class="subtitle">Thoughts, tutorials, research notes, and builds.</p>
+  </div>
+
+  <div class="blog-layout">
+    <aside class="blog-sidebar">
+      <form method="GET" action="/blogs" class="blog-filter">
+        <input type="text" name="q" placeholder="Search..." value="<%= q %>"/>
+
+        <select name="sort">
+          <option value="new" <%= sort==='new'?'selected':'' %>>Newest</option>
+          <option value="old" <%= sort==='old'?'selected':'' %>>Oldest</option>
+          <option value="az" <%= sort==='az'?'selected':'' %>>A–Z</option>
+        </select>
+
+        <button class="btn" type="submit">Apply</button>
+      </form>
+
+      <div class="blog-cats">
+        <h3>Categories</h3>
+        <a class="cat <%= !selectedCategory ? 'active' : '' %>" href="/blogs">All</a>
+
+        <% categories.forEach(c => { %>
+          <a
+            class="cat <%= selectedCategory === c.name ? 'active' : '' %>"
+            href="/blogs?category=<%= encodeURIComponent(c.name) %><%= q ? `&q=${encodeURIComponent(q)}` : '' %>&sort=<%= sort %>"
+          >
+            <span><%= c.name %></span>
+            <span class="count"><%= c.count %></span>
+          </a>
+        <% }) %>
+      </div>
+    </aside>
+
+    <div class="blog-list">
+      <% if (!blogs.length) { %>
+        <div class="empty-state card">No blogs found.</div>
+      <% } %>
+
+      <% blogs.forEach(b => { %>
+        <article class="blog-card">
+          <% if (b.coverImageUrl) { %>
+            <img class="blog-cover" src="<%= b.coverImageUrl %>" alt="<%= b.title %>"/>
+          <% } %>
+
+          <div class="blog-card-body">
+            <h2><a href="/blogs/<%= b.slug %>"><%= b.title %></a></h2>
+            <p class="blog-meta">
+              <%= new Date(b.createdAt).toLocaleDateString() %>
+              <% if (b.categories?.length) { %>
+                • <span class="blog-tag"><%= b.categories[0] %></span>
+              <% } %>
+            </p>
+            <p class="blog-excerpt"><%= b.excerpt || '' %></p>
+            <a class="card-btn" href="/blogs/<%= b.slug %>">Read more →</a>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </div>
+</section>
+</body>
+
+<%- include('../partial/footer') %>
