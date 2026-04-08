@@ -208,11 +208,18 @@
   }
 
   // Card interactions
+  const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
   cards.forEach((card) => {
     card.addEventListener("mouseenter", () => setFocus(card));
     card.addEventListener("focus", () => setFocus(card));
     card.addEventListener("mouseleave", clearFocusToCurrent);
     card.addEventListener("blur", clearFocusToCurrent);
+
+    // Mobile: tap should also “select” before navigating
+    if (isCoarsePointer) {
+      card.addEventListener("pointerdown", () => setFocus(card), { passive: true });
+    }
   });
 
   // Keyboard arrow navigation
@@ -236,14 +243,15 @@
     }
   });
 
-  // Track mouse for subtle canvas response
-  wrap.addEventListener("mousemove", (e) => {
+  function setPointerFromEvent(e) {
     const r = wrap.getBoundingClientRect();
     mouse.x = e.clientX - r.left;
     mouse.y = e.clientY - r.top;
-  });
+  }
 
-  wrap.addEventListener("mouseleave", () => {
+  wrap.addEventListener("pointermove", setPointerFromEvent, { passive: true });
+  wrap.addEventListener("pointerdown", setPointerFromEvent, { passive: true });
+  wrap.addEventListener("pointerleave", () => {
     mouse.x = wrap.clientWidth / 2;
     mouse.y = wrap.clientHeight / 2;
   });

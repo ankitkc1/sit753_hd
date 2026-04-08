@@ -12,13 +12,11 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="main.css" />
 </head>
-
+  <body>
     <%- include('./partial/nav.ejs') %>
   </header>
-
   <main class="layout">
     <section class="intro">
-      <p class="eyebrow">Ankit Says:</p>
       <h1>
         Being Learner is my
         <span>Unfair Advantage.</span>.
@@ -44,7 +42,7 @@
       </div>
 
       <div class="intro-actions">
-        <a href="/projects" class="btn btn-solid">Chat with ANAI</a>
+        <a href="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app" target="_blank" class="btn btn-solid">Chat with ANAI</a>
       </div>
     </section>
 
@@ -151,6 +149,28 @@
         </div>
       </div>
     </section>
+
+    <!-- Chatbot section -->
+<section class="chatbot-section" aria-label="RAG chatbot">
+  <div class="chatbot-topbar">
+    <div>
+      <p class="eyebrow">ANAI Assistant</p>
+      <h2>Ask My RAG Chatbot</h2>
+      <p class="chatbot-subtitle">Ask about projects, tools, research, and experience.</p>
+    </div>
+    <span class="mono-pill">live</span>
+  </div>
+
+  <div class="chatbot-frame-wrap">
+    <iframe
+      src="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app/?embed=true&embed_options=hide_loading_screen&embed_options=disable_scrolling&embed_options=light_theme"
+      title="ANAI RAG Chatbot"
+      loading="lazy"
+      allow="clipboard-write; clipboard-read"
+      referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+  </div>
+</section>
   </main>
 
   <%- include('./partial/footer') %>
