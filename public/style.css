@@ -10,19 +10,19 @@
 
 :root {
   /* Core palette */
-  --bg: #ffffff;
-  --ink: #0f1012;
-  --muted: #666a73;
+  --bg: #f8fafc;
+  --ink: #0f172a;
+  --muted: #64748b;
 
   /* Surface + lines */
   --panel: #ffffff;
-  --soft: #f6f7f8;
-  --soft-2: #f2f3f5;
-  --line: #d9dbe0;
-  --line-dark: #b7bcc5;
+  --soft: #f1f5f9;
+  --soft-2: #e2e8f0;
+  --line: #e2e8f0;
+  --line-dark: #cbd5e1;
 
-  /* Accent is monochrome on purpose */
-  --accent: #111111;
+  /* Accent changes to Indigo */
+  --accent: #4f46e5;
 
   /* Typography */
   --font-head: 'Inter', system-ui, sans-serif;
@@ -32,8 +32,8 @@
   /* Shape + shadow */
   --radius: 14px;
   --radius-sm: 10px;
-  --shadow: 0 10px 28px rgba(16, 18, 22, 0.05);
-  --shadow-hover: 0 18px 36px rgba(16, 18, 22, 0.08);
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 18px 40px rgba(79, 70, 229, 0.1);
 
   /* Motion */
   --ease: cubic-bezier(.2,.8,.2,1);
@@ -231,9 +231,9 @@ a, button, .card, .project-card, .paper, .blog-card, .cat, .btn, .btn-sm {
   position: relative;
   overflow: hidden;
 
-  /* white theme + optional existing image very subtle */
+  /* slate theme + optional existing image very subtle */
   background:
-    linear-gradient(#ffffff, #ffffff),
+    linear-gradient(rgba(248, 250, 252, 0.96), rgba(241, 245, 249, 0.98)),
     url('books-bg.jpg') center/cover;
 }
 
@@ -259,7 +259,7 @@ a, button, .card, .project-card, .paper, .blog-card, .cat, .btn, .btn-sm {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(rgba(255,255,255,.90), rgba(255,255,255,.95));
+    linear-gradient(rgba(248,250,252,.80), rgba(248,250,252,1));
   pointer-events: none;
 }
 
@@ -314,8 +314,8 @@ a, button, .card, .project-card, .paper, .blog-card, .cat, .btn, .btn-sm {
   text-decoration: none;
   font-weight: 650;
   color: #fff;
-  background: var(--ink);
-  border: 1px solid var(--ink);
+  background: var(--accent);
+  border: 1px solid var(--accent);
   box-shadow: none;
 }
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,173 +9,149 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="main.css" />
 </head>
-  <body>
-    <%- include('./partial/nav.ejs') %>
-  </header>
-  <main class="layout">
-    <section class="intro">
-      <h1>
-        Being Learner is my
-        <span>Unfair Advantage.</span>.
-      </h1>
 
-      <p class="lede">
-        Depth is not measured, it is Built !
-      </p>
+<body>
+  <%- include('./partial/nav.ejs') %>
+    </header>
+    <main class="layout">
+      <section class="intro">
+        <h1>
+          Code With Depth.
+          <br>
+          Research With Purpose.
+          <br>
+          <span>Build With Vision...</span>
+        </h1>
 
-      <div class="meta-stack">
-        <div class="meta-row">
-          <span class="meta-key">mode</span>
-          <span class="meta-val">Learning</span>
+        <p class="lede">
+          Being Learner is my Unfair Advantage !
+        </p>
+
+        <div class="meta-stack">
+          <div class="meta-row">
+            <span class="meta-key">mode</span>
+            <span class="meta-val">Learning</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">style</span>
+            <span class="meta-val">Concise, Analytical, Rigorous</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-key">status</span>
+            <span class="meta-val" id="liveStatus">System Prompt loaded</span>
+          </div>
         </div>
-        <div class="meta-row">
-          <span class="meta-key">style</span>
-          <span class="meta-val">Concise, Analytical, Rigorous</span>
+
+        <div class="intro-actions">
+          <a href="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app" target="_blank" class="btn btn-solid">Chat with
+            ANAI</a>
         </div>
-        <div class="meta-row">
-          <span class="meta-key">status</span>
-          <span class="meta-val" id="liveStatus">System Prompt loaded</span>
+      </section>
+
+      <section class="context-board" aria-label="Semantic context map navigation">
+        <div class="board-header">
+          <div class="header-left">
+            <span class="mono-label">WINDOW</span>
+            <h2>Labels</h2>
+          </div>
+          <div class="header-right">
+            <span class="mono-pill" id="focusTag">system</span>
+          </div>
         </div>
-      </div>
 
-      <div class="intro-actions">
-        <a href="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app" target="_blank" class="btn btn-solid">Chat with ANAI</a>
-      </div>
-    </section>
+        <div class="board-canvas-wrap">
+          <canvas id="semanticCanvas" aria-hidden="true"></canvas>
 
-    <section class="context-board" aria-label="Semantic context map navigation">
-      <div class="board-header">
-        <div class="header-left">
-          <span class="mono-label">WINDOW</span>
-          <h2>Labels</h2>
+          <nav class="context-cards" id="contextCards">
+            <a class="ctx-card is-current" href="/" data-stop="Home" data-role="Index Page" data-node="system"
+              data-links="persona,tools,memory" aria-label="Home - System Prompt">
+              <span class="ctx-index">01</span>
+              <h3>Home</h3>
+              <p>Landing Site</p>
+              <span class="ctx-meta">entry context</span>
+            </a>
+
+            <a class="ctx-card" href="/about" data-stop="About" data-role="Persona" data-node="persona"
+              data-links="system,tools,response" aria-label="About - Persona">
+              <span class="ctx-index">02</span>
+              <h3>About</h3>
+              <p>Persona</p>
+              <span class="ctx-meta">picture / description</span>
+            </a>
+
+            <a class="ctx-card" href="/blogs" data-stop="Blog" data-role="Blogs" data-node="reasoning"
+              data-links="memory,tools,knowledge" aria-label="Blog - Reasoning Notes">
+              <span class="ctx-index">03</span>
+              <h3>Blog</h3>
+              <p>Reasoning Notes</p>
+              <span class="ctx-meta">thought trails</span>
+            </a>
+
+            <a class="ctx-card" href="/project" data-stop="Projects" data-role="project" data-node="tools"
+              data-links="system,persona,retrieval,response" aria-label="Projects - Tool Calls">
+              <span class="ctx-index">04</span>
+              <h3>Projects</h3>
+              <p>Tools</p>
+              <span class="ctx-meta">tech stacks</span>
+            </a>
+
+            <a class="ctx-card" href="/research" data-stop="Research" data-role="publications" data-node="retrieval"
+              data-links="tools,memory,knowledge" aria-label="Research - Retrieval">
+              <span class="ctx-index">05</span>
+              <h3>Research</h3>
+              <p>publications</p>
+              <span class="ctx-meta">data</span>
+            </a>
+
+
+            <a class="ctx-card" href="/contact" data-stop="Contact" data-role="Response" data-node="response"
+              data-links="persona,tools,knowledge" aria-label="Contact - Final Response">
+              <span class="ctx-index">06</span>
+              <h3>Contact</h3>
+              <p>Response</p>
+              <span class="ctx-meta">send query</span>
+            </a>
+          </nav>
         </div>
-        <div class="header-right">
-          <span class="mono-pill" id="focusTag">system</span>
+
+        <div class="board-footer">
+          <div class="terminal-line">
+            <span class="prompt">assistant://</span>
+            <span id="terminalText">Ready. Select a node to navigate the portfolio.</span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="board-canvas-wrap">
-        <canvas id="semanticCanvas" aria-hidden="true"></canvas>
-
-        <nav class="context-cards" id="contextCards">
-          <a class="ctx-card is-current"
-             href="/"
-             data-stop="Home"
-             data-role="Index Page"
-             data-node="system"
-             data-links="persona,tools,memory"
-             aria-label="Home - System Prompt">
-            <span class="ctx-index">01</span>
-            <h3>Home</h3>
-            <p>Landing Site</p>
-            <span class="ctx-meta">entry context</span>
-          </a>
-
-          <a class="ctx-card"
-             href="/about"
-             data-stop="About"
-             data-role="Persona"
-             data-node="persona"
-             data-links="system,tools,response"
-             aria-label="About - Persona">
-            <span class="ctx-index">02</span>
-            <h3>About</h3>
-            <p>Persona</p>
-            <span class="ctx-meta">picture / description</span>
-          </a>
-
-          <a class="ctx-card"
-             href="/blogs"
-             data-stop="Blog"
-             data-role="Blogs"
-             data-node="reasoning"
-             data-links="memory,tools,knowledge"
-             aria-label="Blog - Reasoning Notes">
-            <span class="ctx-index">03</span>
-            <h3>Blog</h3>
-            <p>Reasoning Notes</p>
-            <span class="ctx-meta">thought trails</span>
-          </a>
-
-          <a class="ctx-card"
-             href="/project"
-             data-stop="Projects"
-             data-role="project"
-             data-node="tools"
-             data-links="system,persona,retrieval,response"
-             aria-label="Projects - Tool Calls">
-            <span class="ctx-index">04</span>
-            <h3>Projects</h3>
-            <p>Tools</p>
-            <span class="ctx-meta">tech stacks</span>
-          </a>
-
-          <a class="ctx-card"
-             href="/research"
-             data-stop="Research"
-             data-role="publications"
-             data-node="retrieval"
-             data-links="tools,memory,knowledge"
-             aria-label="Research - Retrieval">
-            <span class="ctx-index">05</span>
-            <h3>Research</h3>
-            <p>publications</p>
-            <span class="ctx-meta">data</span>
-          </a>
-
-
-          <a class="ctx-card"
-             href="/contact"
-             data-stop="Contact"
-             data-role="Response"
-             data-node="response"
-             data-links="persona,tools,knowledge"
-             aria-label="Contact - Final Response">
-            <span class="ctx-index">06</span>
-            <h3>Contact</h3>
-            <p>Response</p>
-            <span class="ctx-meta">send query</span>
-          </a>
-        </nav>
-      </div>
-
-      <div class="board-footer">
-        <div class="terminal-line">
-          <span class="prompt">assistant://</span>
-          <span id="terminalText">Ready. Select a node to navigate the portfolio.</span>
+      <!-- Chatbot section -->
+      <section class="chatbot-section" aria-label="RAG chatbot">
+        <div class="chatbot-topbar">
+          <div>
+            <p class="eyebrow">ANAI Assistant</p>
+            <h2>Ask My RAG Chatbot</h2>
+            <p class="chatbot-subtitle">Ask about projects, tools, research, and experience.</p>
+          </div>
+          <span class="mono-pill">live</span>
         </div>
-      </div>
-    </section>
 
-    <!-- Chatbot section -->
-<section class="chatbot-section" aria-label="RAG chatbot">
-  <div class="chatbot-topbar">
-    <div>
-      <p class="eyebrow">ANAI Assistant</p>
-      <h2>Ask My RAG Chatbot</h2>
-      <p class="chatbot-subtitle">Ask about projects, tools, research, and experience.</p>
-    </div>
-    <span class="mono-pill">live</span>
-  </div>
+        <div class="chatbot-frame-wrap">
+          <iframe
+            src="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app/?embed=true&embed_options=hide_loading_screen&embed_options=disable_scrolling&embed_options=light_theme"
+            title="ANAI RAG Chatbot" loading="lazy" allow="clipboard-write; clipboard-read"
+            referrerpolicy="strict-origin-when-cross-origin">
+          </iframe>
+        </div>
+      </section>
+    </main>
 
-  <div class="chatbot-frame-wrap">
-    <iframe
-      src="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app/?embed=true&embed_options=hide_loading_screen&embed_options=disable_scrolling&embed_options=light_theme"
-      title="ANAI RAG Chatbot"
-      loading="lazy"
-      allow="clipboard-write; clipboard-read"
-      referrerpolicy="strict-origin-when-cross-origin">
-    </iframe>
-  </div>
-</section>
-  </main>
+    <%- include('./partial/footer') %>
 
-  <%- include('./partial/footer') %>
-
-  <script src="main.js" defer></script>
+      <script src="main.js" defer></script>
 </body>
+
 </html>

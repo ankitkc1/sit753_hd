@@ -1,16 +1,16 @@
 :root {
   /* Your theme */
-  --bg: #ffffff;
-  --ink: #0f1012;
-  --muted: #666a73;
+  --bg: #f8fafc;
+  --ink: #0f172a;
+  --muted: #64748b;
 
   --panel: #ffffff;
-  --soft: #f6f7f8;
-  --soft-2: #f2f3f5;
-  --line: #d9dbe0;
-  --line-dark: #b7bcc5;
+  --soft: #f1f5f9;
+  --soft-2: #e2e8f0;
+  --line: #e2e8f0;
+  --line-dark: #cbd5e1;
 
-  --accent: #111111;
+  --accent: #4f46e5;
 
   --font-head: 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
@@ -18,28 +18,28 @@
 
   --radius: 14px;
   --radius-sm: 10px;
-  --shadow: 0 10px 28px rgba(16, 18, 22, 0.05);
-  --shadow-hover: 0 18px 36px rgba(16, 18, 22, 0.08);
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 18px 40px rgba(79, 70, 229, 0.1);
 
   --ease: cubic-bezier(.2,.8,.2,1);
 }
 
 /* Optional dark mode using same variable system */
 html[data-theme="dark"] {
-  --bg: #0c0d10;
-  --ink: #f4f5f7;
-  --muted: #a7acb6;
+  --bg: #0f172a;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
 
-  --panel: #111318;
-  --soft: #151821;
-  --soft-2: #1a1f2a;
-  --line: #2a2f3a;
-  --line-dark: #3b4250;
+  --panel: #1e293b;
+  --soft: #334155;
+  --soft-2: #475569;
+  --line: #334155;
+  --line-dark: #475569;
 
-  --accent: #ffffff;
+  --accent: #818cf8;
 
   --shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
-  --shadow-hover: 0 22px 44px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 22px 44px rgba(129, 140, 248, 0.2);
 }
 
 * { box-sizing: border-box; }

@@ -1,13 +1,13 @@
 :root {
-  --bg: #ffffff;
-  --ink: #0f0f10;
-  --muted: #6b6b73;
-  --line: #d9d9de;
-  --line-dark: #b8b8c0;
+  --bg: #f8fafc;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --line-dark: #cbd5e1;
   --panel: #ffffff;
-  --soft: #f7f7f8;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-  --shadow-hover: 0 18px 40px rgba(0, 0, 0, 0.07);
+  --soft: #f1f5f9;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  --shadow-hover: 0 18px 40px rgba(79, 70, 229, 0.1);
   --radius: 14px;
 }
 
@@ -214,16 +214,16 @@ body {
 }
 
 .context-board {
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
 }
 
 .board-header {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--line);
+  padding: 14px 0;
+  border-bottom: none;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -339,9 +339,9 @@ body {
 .ctx-card[data-node="response"]   { grid-column: 7 / span 4;  grid-row: 8 / span 2; }
 
 .board-footer {
-  border-top: 1px solid var(--line);
-  padding: 10px 14px;
-  background: #fff;
+  border-top: none;
+  padding: 10px 0;
+  background: transparent;
 }
 
 .terminal-line {
@@ -437,12 +437,12 @@ body {
    ========================= */
 .chatbot-section {
   grid-column: 1 / -1; /* spans both columns of .layout */
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--panel);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  margin-top: 2px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  margin-top: 20px;
 }
 
 .chatbot-topbar {
@@ -450,9 +450,9 @@ body {
   align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 14px 16px 12px;
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(to bottom, var(--soft), #fff);
+  padding: 14px 0 12px;
+  border-bottom: none;
+  background: transparent;
 }
 
 .chatbot-topbar .eyebrow {
@@ -475,7 +475,7 @@ body {
 
 .chatbot-frame-wrap {
   position: relative;
-  background: var(--soft);
+  background: transparent;
 }
 
 .chatbot-frame-wrap::before {

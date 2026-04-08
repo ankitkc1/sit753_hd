@@ -43,65 +43,8 @@ app.get('/research', (req, res) => res.render('research.ejs', { activePage: 'res
 app.get('/contact', (req, res) => res.render('contact.ejs', { activePage: 'contact' }));
 
 app.get("/about", (req, res) => {
-  res.render("about", {
-    profile: {
-      name: "Ankit K C",
-      headline: "Played by Maths",
-      kicker: "AI Developer | Full-stack Developer | Researcher",
-      intro: "Just a human trying to make cool stuff with code and research. I have a passion for building things that people find useful, whether it's a web app, a research paper, or just a neat algorithm. When I'm not coding, you can find me exploring the outdoors, playing chess, or trying to cook something new (with varying success).",
-      location: "Melbourne, AU",
-      email: "ankitkc908@gmail.com",
-      website: "https://your-site.com",
-      websiteLabel: "ankitkc1.com.np",
-      highlights: ["Python", "LLM/ RAG", "FastAPI", "Node.js", "Vector DB/Search", "MongoDB", "Docker", "Research"]
-    },
-    stats: [
-      { label: "Publications", value: 5, suffix: "+", note: "Peer-reviewed" },
-      { label: "Reviewed papers", value: 6, suffix: "+", note: "Journal / conference" },
-      { label: "Total citations", value: 27, suffix: "+", note: "Google Scholar" },
-      { label: "h-index", value: 4, suffix: "", note: "Current" },
-      { label: "Projects shipped", value: 4, suffix: "+", note: "Production builds" },
-    ],
-    impact: {
-      citationGrowth: 68,
-      orcid: "0000-0000-0000-0000",
-      areas: ["Blockchain", "Health tech", "RAG Systems"],
-      lastUpdated: "March 2026"
-    },
-    skills: [
-      {
-        group: "AI / ML",
-        items: [
-          { name: "Python", level: 88, note: "Machine learning and LLM work" },
-          { name: "LLMs / RAG", level: 74, note: "Retrieval-based AI systems" },
-          { name: "FastAPI", level: 68, note: "AI service APIs" },
-          { name: "PostgreSQL / Vector Search", level: 78, note: "Structured + semantic retrieval" },
-          { name: "Docker", level: 65, note: "Deployment and reproducibility" }
-        ]
-      },
-      {
-        group: "Web Dev",
-        items: [
-          { name: "HTML/CSS", level: 92, note: "Responsive and accessible UI" },
-          { name: "JavaScript", level: 88, note: "Interactive front-end features" },
-          { name: "Node.js", level: 86, note: "Express, APIs, auth" }
-        ]
-      },
-      {
-        group: "Research",
-        items: [
-          { name: "Scientific Writing", level: 82, note: "Clear and structured" },
-          { name: "Literature Review", level: 84, note: "Finding and organizing key ideas" },
-          { name: "Research Thinking", level: 80, note: "Problem solving and hypothesis building" },
-          { name: "Data Analysis", level: 65, note: "Interpreting results and trends" }
-        ]
-      }
-    ],
-    education: [
-      { degree: "Master of Information Technology", school: "Deakin University", years: "2025 — 2027", grade: "High Distinction" },
-      { degree: "Bachelor of Technology in Software Engineering", school: "CGU", years: "2020 — 2024", grade: "9.47/10" }
-    ]
-  });
+  const aboutData = require('./data/about.js');
+  res.render("about", aboutData);
 });
 
 app.get('/download-resume', (req, res) => {
