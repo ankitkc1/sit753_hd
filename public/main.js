@@ -269,6 +269,11 @@
     setFocus(current);
   }
 
+  const scrollContainer = document.getElementById("contextCards");
+  if (scrollContainer) {
+    scrollContainer.addEventListener("scroll", measureNodes, { passive: true });
+  }
+
   // Resize handling
   const ro = new ResizeObserver(() => {
     resizeCanvas();

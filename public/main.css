@@ -423,10 +423,6 @@ body {
     min-height: 96px;
   }
 
-  #semanticCanvas {
-    display: none;
-  }
-
   .meta-row {
     grid-template-columns: 92px 1fr;
   }
@@ -588,17 +584,13 @@ body {
     grid-column: auto !important;
     grid-row: auto !important;
   }
-
-  /* Optional: hide canvas for performance + cleaner look */
-  #semanticCanvas {
-    display: none;
-  }
 }
 
 /* Small phones: make it a swipeable row (prevents a very long section) */
 @media (max-width: 560px) {
   .context-cards {
     display: flex;
+    flex-direction: row;
     overflow-x: auto;
     gap: 12px;
     padding-bottom: 6px;

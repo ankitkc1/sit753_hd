@@ -14,9 +14,7 @@
 </head>
 
 <body>
-  <header>
-    <%- include('./partial/nav.ejs') %>
-  </header>
+  <%- include('./partial/nav.ejs') %>
 
   <main class="wrap page">
     <!-- HERO -->
@@ -182,9 +180,11 @@
 
           </ul>
         </div>
+      </div>
+    </section>
 
-        <!-- SKILLS -->
-        <section id="skills" class="section">
+    <!-- SKILLS -->
+    <section id="skills" class="section">
           <div class="section__head">
             <h2 class="h2">Skills</h2>
           </div>
@@ -226,10 +226,10 @@
 
               <% }) %>
           </div>
-        </section>
+    </section>
 
-        <!-- EDUCATION -->
-        <section id="education" class="section">
+    <!-- EDUCATION -->
+    <section id="education" class="section">
           <div class="section__head">
             <h2 class="h2">Education</h2>
           </div>
@@ -269,13 +269,13 @@
 
               <% }) %>
           </div>
-        </section>
+    </section>
 
-
-        <%- include('./partial/footer') %>
+    <%- include('./partial/footer') %>
   </main>
 
   <script defer src="about.js"></script>
+  <script defer src="/script.js?v=1.2"></script>
 </body>
 
 </html>
