@@ -8,7 +8,8 @@ const aboutData = {
     email: "ankitkc908@gmail.com",
     website: "https://ankitkc1.com.np",
     websiteLabel: "ankitkc1.com.np",
-    highlights: ["Python", "LangChain", "FastAPI", "Node.js", "Vector DB/Search", "MongoDB"]
+    highlights: ["Python", "LangChain", "FastAPI", "Node.js", "Vector DB/Search", "MongoDB"],
+    avatarUrl: "/profile_pic.jpeg"
   },
   stats: [
     { label: "Publications", value: 5, suffix: "+", note: "Peer-reviewed" },
