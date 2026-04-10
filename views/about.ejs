@@ -16,266 +16,267 @@
 <body>
   <%- include('./partial/nav.ejs') %>
 
-  <main class="wrap page">
-    <!-- HERO -->
-    <section id="about" class="hero">
-      <div class="hero__card">
-        <div class="hero__media">
-          <img class="avatar" src="<%= profile.avatarUrl %>" alt="Profile photo">
-          <div class="stamp" aria-hidden="true">
-            <div class="stamp__ring"></div>
-            <div class="stamp__text">ABOUT • PROFILE •</div>
-          </div>
-        </div>
-
-        <div class="hero__content">
-          <p class="kicker">
-            <%= profile?.kicker || 'Developer • Researcher • Builder' %>
-          </p>
-          <h1 class="title">
-            <%= profile?.headline || (profile?.name ? `Hi, I’m ${profile.name}.` : 'Hi, I’m a developer.' ) %>
-          </h1>
-          <p class="lead">
-            <%= profile?.intro
-              || 'Write a short, confident intro here. Mention what you build, what you’re known for, and what you’re looking for next.'
-              %>
-          </p>
-
-          <div class="chips" aria-label="Highlights">
-            <% (profile?.highlights || []).forEach(function(tag){ %>
-              <span class="chip">
-                <%= tag %>
-              </span>
-              <% }) %>
+    <main class="wrap page">
+      <!-- HERO -->
+      <section id="about" class="hero">
+        <div class="hero__card">
+          <div class="hero__media">
+            <img class="avatar" src="<%= profile.avatarUrl %>" alt="Profile photo">
+            <div class="stamp" aria-hidden="true">
+              <div class="stamp__ring"></div>
+              <div class="stamp__text">ABOUT ME </div>
+            </div>
           </div>
 
-          <div class="hero__meta">
-            <div class="meta">
-              <span class="meta__label">Location</span>
-              <span class="meta__value">
-                <%= profile?.location || 'Melbourne, AU' %>
-              </span>
+          <div class="hero__content">
+            <p class="kicker">
+              <%= profile?.kicker || 'Developer • Researcher • Builder' %>
+            </p>
+            <h1 class="title">
+              <%= profile?.headline || (profile?.name ? `Hi, I’m ${profile.name}.` : 'Hi, I’m a developer.' ) %>
+            </h1>
+            <p class="lead">
+              <%= profile?.intro
+                || 'Write a short, confident intro here. Mention what you build, what you’re known for, and what you’re looking for next.'
+                %>
+            </p>
+
+            <div class="chips" aria-label="Highlights">
+              <% (profile?.highlights || []).forEach(function(tag){ %>
+                <span class="chip">
+                  <%= tag %>
+                </span>
+                <% }) %>
             </div>
-            <div class="meta">
-              <span class="meta__label">Email</span>
-              <span class="meta__value">
-                <a class="link" href="mailto:<%= profile?.email || 'hello@example.com' %>">
-                  <%= profile?.email || 'ankitkc908@gmail.com' %>
-                </a>
-              </span>
-            </div>
-            <div class="meta">
-              <span class="meta__label">Website</span>
-              <span class="meta__value">
-                <% if (profile?.website) { %>
-                  <a class="link" href="<%= profile.website %>" target="_blank" rel="noreferrer">
-                    <%= profile.websiteLabel || 'Visit' %>
+
+            <div class="hero__meta">
+              <div class="meta">
+                <span class="meta__label">Location</span>
+                <span class="meta__value">
+                  <%= profile?.location || 'Melbourne, AU' %>
+                </span>
+              </div>
+              <div class="meta">
+                <span class="meta__label">Email</span>
+                <span class="meta__value">
+                  <a class="link" href="mailto:<%= profile?.email || 'hello@example.com' %>">
+                    <%= profile?.email || 'ankitkc908@gmail.com' %>
                   </a>
-                  <% } else { %>
-                    <span class="muted">your-site.com</span>
-                    <% } %>
-              </span>
+                </span>
+              </div>
+              <div class="meta">
+                <span class="meta__label">Website</span>
+                <span class="meta__value">
+                  <% if (profile?.website) { %>
+                    <a class="link" href="<%= profile.website %>" target="_blank" rel="noreferrer">
+                      <%= profile.websiteLabel || 'Visit' %>
+                    </a>
+                    <% } else { %>
+                      <span class="muted">your-site.com</span>
+                      <% } %>
+                </span>
+              </div>
             </div>
+
+            <div class="hero__cta">
+              <button class="btn" id="copyEmail" type="button"
+                data-email="<%= profile?.email || 'hello@example.com' %>">
+                Copy email
+              </button>
+
+              <% if (profile?.cvUrl) { %>
+                <a class="btn btn--ghost" href="<%= profile.cvUrl %>" target="_blank" rel="noreferrer">Download CV</a>
+                <% } else { %>
+                  <a class="btn btn--ghost" href="#" aria-disabled="true" onclick="return false;">Download CV</a>
+                  <% } %>
+            </div>
+
+            <p class="fine muted">
+              <span class="pulse" aria-hidden="true"></span>
+              <%= profile?.statusLine || 'Open to collaborations & interesting problems.' %>
+            </p>
           </div>
+        </div>
+      </section>
 
-          <div class="hero__cta">
-            <button class="btn" id="copyEmail" type="button" data-email="<%= profile?.email || 'hello@example.com' %>">
-              Copy email
-            </button>
-
-            <% if (profile?.cvUrl) { %>
-              <a class="btn btn--ghost" href="<%= profile.cvUrl %>" target="_blank" rel="noreferrer">Download CV</a>
-              <% } else { %>
-                <a class="btn btn--ghost" href="#" aria-disabled="true" onclick="return false;">Download CV</a>
-                <% } %>
-          </div>
-
-          <p class="fine muted">
-            <span class="pulse" aria-hidden="true"></span>
-            <%= profile?.statusLine || 'Open to collaborations & interesting problems.' %>
+      <!-- STATS (COUNT UP) -->
+      <section id="research" class="section">
+        <div class="section__head">
+          <h2 class="h2">Research & Impact</h2>
+          <p class="sub">
+            Numbers that animate when the section becomes visible — clean, credible, and satisfying.
           </p>
         </div>
-      </div>
-    </section>
 
-    <!-- STATS (COUNT UP) -->
-    <section id="research" class="section">
-      <div class="section__head">
-        <h2 class="h2">Research & Impact</h2>
-        <p class="sub">
-          Numbers that animate when the section becomes visible — clean, credible, and satisfying.
-        </p>
-      </div>
+        <div class="stats" data-animate="counters">
+          <% (stats || []).forEach(function(s){ %>
 
-      <div class="stats" data-animate="counters">
-        <% (stats || []).forEach(function(s){ %>
-
-          <article class="stat">
-            <div class="stat__top">
-              <div class="stat__label">
-                <%= s.label %>
-              </div>
-              <div class="stat__value">
-                <span class="count" data-count="<%= s.value %>" data-suffix="<%= s.suffix || '' %>"
-                  aria-label="<%= `${s.label}: ${s.value}${s.suffix || ''}` %>">
-                  <%= s.value %>
-                    <%= s.suffix || '' %>
-                </span>
-              </div>
-            </div>
-            <div class="stat__note muted">
-              <%= s.note || '' %>
-            </div>
-            <div class="stat__bar" aria-hidden="true"></div>
-          </article>
-
-          <% }) %>
-      </div>
-
-      <div class="impact">
-        <div class="impact__card">
-          <h3 class="h3">Impact snapshot</h3>
-
-
-          <div class="impact__grid">
-            <div class="ring" data-ring="<%= impact?.citationGrowth || 68 %>">
-              <div class="ring__inner">
-                <div class="ring__value">
-                  <%= impact?.citationGrowth || 68 %>%
+            <article class="stat">
+              <div class="stat__top">
+                <div class="stat__label">
+                  <%= s.label %>
                 </div>
-                <div class="ring__label muted">Citation growth</div>
+                <div class="stat__value">
+                  <span class="count" data-count="<%= s.value %>" data-suffix="<%= s.suffix || '' %>"
+                    aria-label="<%= `${s.label}: ${s.value}${s.suffix || ''}` %>">
+                    <%= s.value %>
+                      <%= s.suffix || '' %>
+                  </span>
+                </div>
               </div>
-            </div>
+              <div class="stat__note muted">
+                <%= s.note || '' %>
+              </div>
+              <div class="stat__bar" aria-hidden="true"></div>
+            </article>
 
-            <div class="impact__list">
-              <div class="kv">
-                <span class="kv__k muted">ORCID</span>
-                <span class="kv__v">
-                  <%= impact?.orcid || '0000-0000-0000-0000' %>
-                </span>
+            <% }) %>
+        </div>
+
+        <div class="impact">
+          <div class="impact__card">
+            <h3 class="h3">Impact snapshot</h3>
+
+
+            <div class="impact__grid">
+              <div class="ring" data-ring="<%= impact?.citationGrowth || 68 %>">
+                <div class="ring__inner">
+                  <div class="ring__value">
+                    <%= impact?.citationGrowth || 68 %>%
+                  </div>
+                  <div class="ring__label muted">Citation growth</div>
+                </div>
               </div>
-              <div class="kv">
-                <span class="kv__k muted">Research areas</span>
-                <span class="kv__v">
-                  <%= (impact?.areas || ['HCI', 'Systems' , 'Health tech' ]).join(' . ') %></span>
+
+              <div class="impact__list">
+                <div class="kv">
+                  <span class="kv__k muted">ORCID</span>
+                  <span class="kv__v">
+                    <%= impact?.orcid || '0000-0000-0000-0000' %>
+                  </span>
+                </div>
+                <div class="kv">
+                  <span class="kv__k muted">Research areas</span>
+                  <span class="kv__v">
+                    <%= (impact?.areas || ['HCI', 'Systems' , 'Health tech' ]).join(' . ') %></span>
               </div>
               <div class="kv">
                 <span class="kv__k muted">Last updated</span>
                 <span class="kv__v"><%= impact?.lastUpdated || ' This month' %>
-                </span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
+
+          <div class="impact__card impact__card--quiet">
+            <h3 class="h3">Signature strength</h3>
+            <p class="muted">
+              Advancing AI for health tech through research-driven innovation.
+            </p>
+            <ul class="ticks">
+              <li>Published researcher turning AI/RAG theory into health tech solutions</li>
+              <li>Unique cross-domain edge - blockchain trust and security can be applied to AI reliability</li>
+              <li>Startup mindset with research discipline - spots unsolved problems, builds defensible solutions</li>
+
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills" class="section">
+        <div class="section__head">
+          <h2 class="h2">Skills</h2>
         </div>
 
-        <div class="impact__card impact__card--quiet">
-          <h3 class="h3">Signature strength</h3>
-          <p class="muted">
-            Advancing AI for health tech through research-driven innovation.
-          </p>
-          <ul class="ticks">
-            <li>Published researcher turning AI/RAG theory into health tech solutions</li>
-            <li>Unique cross-domain edge - blockchain trust and security can be applied to AI reliability</li>
-            <li>Startup mindset with research discipline - spots unsolved problems, builds defensible solutions</li>
+        <div class="skills" data-animate="skills">
+          <% (skills || []).forEach(function(group){ %>
 
-          </ul>
+            <section class="skillgroup" aria-label="<%= group.group %>">
+              <h3 class="h3">
+                <%= group.group %>
+              </h3>
+
+              <div class="skilllist">
+                <% group.items.forEach(function(item){ %>
+                  <div class="skill">
+                    <div class="skill__row">
+                      <div class="skill__name">
+                        <%= item.name %>
+                      </div>
+                      <div class="skill__pct muted"><span class="pct" data-pct="<%= item.level %>">
+                          <%= item.level %>
+                        </span>%</div>
+                    </div>
+
+                    <div class="bar" role="progressbar" aria-label="<%= item.name %>" aria-valuemin="0"
+                      aria-valuemax="100" aria-valuenow="<%= item.level %>" data-level="<%= item.level %>">
+                      <div class="bar__fill"></div>
+                    </div>
+
+                    <% if (item.note) { %>
+                      <div class="skill__note muted">
+                        <%= item.note %>
+                      </div>
+                      <% } %>
+                  </div>
+                  <% }) %>
+              </div>
+            </section>
+
+            <% }) %>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- SKILLS -->
-    <section id="skills" class="section">
-          <div class="section__head">
-            <h2 class="h2">Skills</h2>
-          </div>
+      <!-- EDUCATION -->
+      <section id="education" class="section">
+        <div class="section__head">
+          <h2 class="h2">Education</h2>
+        </div>
 
-          <div class="skills" data-animate="skills">
-            <% (skills || []).forEach(function(group){ %>
+        <div class="timeline">
+          <% (education || []).forEach(function(ed){ %>
 
-              <section class="skillgroup" aria-label="<%= group.group %>">
-                <h3 class="h3">
-                  <%= group.group %>
-                </h3>
-
-                <div class="skilllist">
-                  <% group.items.forEach(function(item){ %>
-                    <div class="skill">
-                      <div class="skill__row">
-                        <div class="skill__name">
-                          <%= item.name %>
-                        </div>
-                        <div class="skill__pct muted"><span class="pct" data-pct="<%= item.level %>">
-                            <%= item.level %>
-                          </span>%</div>
-                      </div>
-
-                      <div class="bar" role="progressbar" aria-label="<%= item.name %>" aria-valuemin="0"
-                        aria-valuemax="100" aria-valuenow="<%= item.level %>" data-level="<%= item.level %>">
-                        <div class="bar__fill"></div>
-                      </div>
-
-                      <% if (item.note) { %>
-                        <div class="skill__note muted">
-                          <%= item.note %>
-                        </div>
-                        <% } %>
-                    </div>
-                    <% }) %>
+            <article class="titem">
+              <div class="titem__dot" aria-hidden="true"></div>
+              <div class="titem__card">
+                <div class="titem__top">
+                  <h3 class="h3">
+                    <%= ed.degree %>
+                  </h3>
+                  <div class="titem__years muted">
+                    <%= ed.years %>
+                  </div>
                 </div>
-              </section>
-
-              <% }) %>
-          </div>
-    </section>
-
-    <!-- EDUCATION -->
-    <section id="education" class="section">
-          <div class="section__head">
-            <h2 class="h2">Education</h2>
-          </div>
-
-          <div class="timeline">
-            <% (education || []).forEach(function(ed){ %>
-
-              <article class="titem">
-                <div class="titem__dot" aria-hidden="true"></div>
-                <div class="titem__card">
-                  <div class="titem__top">
-                    <h3 class="h3">
-                      <%= ed.degree %>
-                    </h3>
-                    <div class="titem__years muted">
-                      <%= ed.years %>
-                    </div>
-                  </div>
-                  <div class="titem__school">
-                    <%= ed.school %>
-                  </div>
-                  <div class="titem__grade muted">
-                    <%= ed.grade %>
-                  </div>
-
-                  <% if (ed.details && ed.details.length) { %>
-                    <ul class="bullets">
-                      <% ed.details.forEach(function(d){ %>
-                        <li>
-                          <%= d %>
-                        </li>
-                        <% }) %>
-                    </ul>
-                    <% } %>
+                <div class="titem__school">
+                  <%= ed.school %>
                 </div>
-              </article>
+                <div class="titem__grade muted">
+                  <%= ed.grade %>
+                </div>
 
-              <% }) %>
-          </div>
-    </section>
+                <% if (ed.details && ed.details.length) { %>
+                  <ul class="bullets">
+                    <% ed.details.forEach(function(d){ %>
+                      <li>
+                        <%= d %>
+                      </li>
+                      <% }) %>
+                  </ul>
+                  <% } %>
+              </div>
+            </article>
 
-    <%- include('./partial/footer') %>
-  </main>
+            <% }) %>
+        </div>
+      </section>
 
-  <script defer src="about.js"></script>
-  <script defer src="/script.js?v=1.2"></script>
+      <%- include('./partial/footer') %>
+    </main>
+
+    <script defer src="about.js"></script>
+    <script defer src="/script.js?v=1.2"></script>
 </body>
 
 </html>

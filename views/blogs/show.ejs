@@ -1,15 +1,19 @@
 <%- include('../partial/header', { activePage }) %>
 
-<section class="blog-post">
-  <% if (!blog) { %>
-    <div class="card">Blog not found.</div>
-  <% } else { %>
-    <div class="post-head">
-      <h1><%= blog.title %></h1>
-      <p class="blog-meta">
-        <%= new Date(blog.createdAt).toLocaleDateString() %>
-        <% if (blog.categories?.length) { %>
-          • <%= blog.categories.join(', ') %>
+  <body>
+    <%- include('../partial/nav') %>
+      <section class="blog-post">
+        <% if (!blog) { %>
+          <div class="card">Blog not found.</div>
+          <% } else { %>
+            <div class="post-head">
+              <h1>
+                <%= blog.title %>
+              </h1>
+              <p class="blog-meta">
+                <%= new Date(blog.createdAt).toLocaleDateString() %>
+                  <% if (blog.categories?.length) { %>
+                    • <%= blog.categories.join(', ') %>
         <% } %>
       </p>
     </div>
@@ -55,3 +59,5 @@
 </section>
 
 <%- include('../partial/footer') %>
+</body>
+</html>
