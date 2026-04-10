@@ -24,6 +24,21 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 
+// session (must be before routes)
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+    cookie: {
+      httpOnly: true,
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    },
+  })
+);
+
 // locals
 app.use((req, res, next) => {
   res.locals.path = req.path;
@@ -61,20 +76,6 @@ async function startServer() {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('MongoDB connected');
-
-    app.use(
-      session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-        cookie: {
-          httpOnly: true,
-          sameSite: 'lax',
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        },
-      })
-    );
 
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);
