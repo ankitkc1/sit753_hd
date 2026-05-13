@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const session = require('express-session');
 const { MongoStore } = require('connect-mongo');
@@ -12,6 +12,45 @@ const blogRoutes = require('./routes/blogRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
+
+const helmet = require('helmet');
+const client = require('prom-client');
+
+app.use(helmet());
+
+const register = new client.Registry();
+
+client.collectDefaultMetrics({ register });
+
+const httpRequestCounter = new client.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'route', 'status_code']
+});
+
+register.registerMetric(httpRequestCounter);
+
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    httpRequestCounter
+      .labels(req.method, req.path, String(res.statusCode))
+      .inc();
+  });
+  next();
+});
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    service: 'portfolio-blog-cms',
+    timestamp: new Date().toISOString()
+  });
+});
+
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
 
 // view + static
 app.set('view engine', 'ejs');
@@ -25,19 +64,26 @@ app.use(express.json());
 app.use(methodOverride('_method'));
 
 // session (must be before routes)
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-    cookie: {
-      httpOnly: true,
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    },
-  })
-);
+const sessionOptions = {
+  secret: process.env.SESSION_SECRET || 'test-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+// Use MongoDB session store only outside testing.
+// This prevents Jest from hanging because MongoStore keeps a DB connection open.
+if (process.env.NODE_ENV !== 'test') {
+  sessionOptions.store = MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+  });
+}
+
+app.use(session(sessionOptions));
 
 // locals
 app.use((req, res, next) => {
@@ -70,19 +116,4 @@ app.use('/blogs', blogRoutes);
 app.use('/onlyankit', adminRoutes);
 app.use((req, res) => res.status(404).send('Not found'));
 
-const PORT = 3500;
-
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB connected');
-
-    app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
-    });
-  } catch (err) {
-    console.error('MongoDB connection failed:', err);
-  }
-}
-
-startServer();
+module.exports = app;

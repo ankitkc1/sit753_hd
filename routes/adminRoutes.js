@@ -90,12 +90,14 @@ router.post('/new', requireAdmin, upload.single('coverImage'), async (req, res) 
     });
 
     res.redirect('/onlyankit');
-  } catch (e) {
-    res.render('admin/form.ejs', {
-      mode: 'create',
-      blog: req.body,
-      error: 'Could not create blog. Title/slug may already exist.',
-    });
+  } catch (error) {
+  console.error('Create blog error:', error.message);
+
+  res.render('admin/form.ejs', {
+    mode: 'create',
+    blog: req.body,
+    error: 'Could not create blog. Title/slug may already exist.',
+  });
   }
 });
 
@@ -142,12 +144,14 @@ router.post('/edit/:id', requireAdmin, upload.single('coverImage'), async (req, 
     });
 
     res.redirect('/onlyankit');
-  } catch (e) {
-    res.render('admin/form.ejs', {
-      mode: 'edit',
-      blog: { ...req.body, _id: req.params.id },
-      error: 'Could not update blog.',
-    });
+  }  catch (error) {
+  console.error('Update blog error:', error.message);
+
+  res.render('admin/form.ejs', {
+    mode: 'edit',
+    blog: { ...req.body, _id: req.params.id },
+    error: 'Could not update blog.',
+  });
   }
 });
 
