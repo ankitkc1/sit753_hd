@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test":"jest --runInBand --coverage --detectOpenHandles",
+    "test": "jest --runInBand --coverage",
     "lint": "eslint .",
     "sonar": "sonar-scanner",
     "build": "npm ci && npm run lint && npm test"
