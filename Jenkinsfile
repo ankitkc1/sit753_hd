@@ -68,7 +68,7 @@ pipeline {
 
                 sh 'npm run lint'
 
-                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                withCredentials([string(credentialsId: 'sit753_hd', variable: 'SONAR_TOKEN')]) {
                     sh 'npx sonar-scanner -Dsonar.token=$SONAR_TOKEN'
                 }
             }
