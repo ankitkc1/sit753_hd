@@ -1,0 +1,20 @@
+groups:
+  - name: portfolio-alerts
+    rules:
+      - alert: PortfolioAppDown
+        expr: up{job="portfolio-prod"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Portfolio application is down"
+          description: "Prometheus cannot scrape the production portfolio app."
+
+      - alert: HighServerErrorRate
+        expr: sum(rate(http_requests_total{status_code=~"5.."}[1m])) > 0
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "High server error rate detected"
+          description: "The app is returning HTTP 5xx errors."

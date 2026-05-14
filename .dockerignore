@@ -1,0 +1,7 @@
+node_modules
+coverage
+.git
+.gitignore
+.env
+npm-debug.log
+public/uploads

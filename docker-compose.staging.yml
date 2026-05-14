@@ -1,0 +1,25 @@
+services:
+  mongo-staging:
+    image: mongo:7
+    container_name: portfolio-mongo-staging
+    restart: unless-stopped
+    volumes:
+      - mongo-staging-data:/data/db
+
+  app-staging:
+    image: ${IMAGE_REPO}:${IMAGE_TAG}
+    container_name: portfolio-app-staging
+    restart: unless-stopped
+    depends_on:
+      - mongo-staging
+    ports:
+      - "3501:3500"
+    environment:
+      NODE_ENV: staging
+      PORT: 3500
+      MONGODB_URI: mongodb://mongo-staging:27017/portfolio_staging
+      SESSION_SECRET: ${SESSION_SECRET}
+      STREAMLIT_URL: ${STREAMLIT_URL:-https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app}
+
+volumes:
+  mongo-staging-data:

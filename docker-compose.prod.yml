@@ -1,0 +1,37 @@
+services:
+  mongo-prod:
+    image: mongo:7
+    container_name: portfolio-mongo-prod
+    restart: unless-stopped
+    volumes:
+      - mongo-prod-data:/data/db
+
+  app-prod:
+    image: ${IMAGE_REPO}:${IMAGE_TAG}
+    container_name: portfolio-app-prod
+    restart: unless-stopped
+    depends_on:
+      - mongo-prod
+    ports:
+      - "3500:3500"
+    environment:
+      NODE_ENV: production
+      PORT: 3500
+      MONGODB_URI: mongodb://mongo-prod:27017/portfolio_prod
+      SESSION_SECRET: ${SESSION_SECRET}
+      STREAMLIT_URL: ${STREAMLIT_URL:-https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app}
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: portfolio-prometheus
+    restart: unless-stopped
+    depends_on:
+      - app-prod
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert.rules.yml:/etc/prometheus/alert.rules.yml
+
+volumes:
+  mongo-prod-data:
