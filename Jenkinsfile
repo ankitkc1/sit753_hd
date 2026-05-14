@@ -75,35 +75,36 @@ pipeline {
         }
 
         stage('Security') {
-            steps {
-                echo 'Running npm audit and Trivy security scans...'
+        steps {
+            echo 'Running npm audit and Trivy security scans...'
 
-                sh 'npm audit --audit-level=high > npm-audit-report.txt'
+            sh 'npm audit --audit-level=high > npm-audit-report.txt'
 
-                sh '''
-                    docker run --rm -v "$PWD:/project" aquasec/trivy fs \
-                    --severity HIGH,CRITICAL \
-                    --format table \
-                    -o /project/trivy-filesystem-report.txt \
-                    /project
-                '''
+            sh '''
+                docker run --rm -v "$PWD:/project" aquasec/trivy fs \
+                --severity HIGH,CRITICAL \
+                --format table \
+                -o /project/trivy-filesystem-report.txt \
+                /project
+            '''
 
-                sh '''
-                    docker save $IMAGE_REPO:$IMAGE_TAG -o portfolio-image.tar
-
-                    docker run --rm -v "$PWD:/project" aquasec/trivy image \
-                    --input /project/portfolio-image.tar \
-                    --severity HIGH,CRITICAL \
-                    --format table \
-                    -o /project/trivy-image-report.txt
-                '''
-            }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'npm-audit-report.txt,trivy-*.txt', allowEmptyArchive: true
-                }
+            sh '''
+                docker run --rm \
+                -v /var/run/docker.sock:/var/run/docker.sock \
+                -v "$PWD:/project" \
+                aquasec/trivy image \
+                --severity HIGH,CRITICAL \
+                --format table \
+                -o /project/trivy-image-report.txt \
+                $IMAGE_REPO:$IMAGE_TAG
+            '''
+        }
+        post {
+            always {
+                archiveArtifacts artifacts: 'npm-audit-report.txt,trivy-*.txt', allowEmptyArchive: true
             }
         }
+    }
 
         stage('Deploy to Staging') {
             steps {
