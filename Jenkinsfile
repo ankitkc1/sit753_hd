@@ -108,7 +108,7 @@ pipeline {
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying application to local staging container...'
+                echo 'Deploying application to local staging container.'
 
                 withCredentials([string(credentialsId: 'staging-session-secret', variable: 'SESSION_SECRET')]) {
                     sh '''
@@ -117,9 +117,24 @@ pipeline {
                         IMAGE_REPO=$IMAGE_REPO IMAGE_TAG=$IMAGE_TAG SESSION_SECRET=$SESSION_SECRET \
                         docker compose -f docker-compose.staging.yml up -d
 
-                        sleep 15
+                        echo "Waiting for staging app health check..."
 
-                        curl -f http://localhost:$STAGING_PORT/health
+                        for i in 1 2 3 4 5 6 7 8 9 10; do
+                            if docker exec portfolio-app-staging node -e "require('http').get('http://127.0.0.1:3500/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"; then
+                                echo "Staging app is healthy."
+                                exit 0
+                            fi
+
+                            echo "Staging app not ready yet. Attempt $i/10"
+                            docker compose -f docker-compose.staging.yml ps
+                            docker logs portfolio-app-staging --tail 30 || true
+                            sleep 10
+                        done
+
+                        echo "Staging health check failed."
+                        docker compose -f docker-compose.staging.yml ps
+                        docker logs portfolio-app-staging --tail 100 || true
+                        exit 1
                     '''
                 }
             }
