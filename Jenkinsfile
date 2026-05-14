@@ -20,7 +20,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-                bat 'git rev-parse --short HEAD'
+                sh 'git rev-parse --short HEAD'
             }
         }
 
@@ -28,10 +28,10 @@ pipeline {
             steps {
                 echo 'Building Docker image and publishing artefact to Docker Hub...'
 
-                bat 'npm ci'
+                sh 'npm ci'
 
-                bat '''
-                docker build -t %IMAGE_REPO%:%IMAGE_TAG% -t %IMAGE_REPO%:latest .
+                sh '''
+                    docker build -t $IMAGE_REPO:$IMAGE_TAG -t $IMAGE_REPO:latest .
                 '''
 
                 withCredentials([usernamePassword(
@@ -39,10 +39,10 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    bat '''
-                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
-                    docker push %IMAGE_REPO%:%IMAGE_TAG%
-                    docker push %IMAGE_REPO%:latest
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push $IMAGE_REPO:$IMAGE_TAG
+                        docker push $IMAGE_REPO:latest
                     '''
                 }
             }
@@ -51,7 +51,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running Jest automated tests with coverage...'
-                bat 'npm test'
+                sh 'npm test'
             }
             post {
                 always {
@@ -64,10 +64,10 @@ pipeline {
             steps {
                 echo 'Running ESLint and Sonar analysis...'
 
-                bat 'npm run lint'
+                sh 'npm run lint'
 
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    bat 'npx sonar-scanner -Dsonar.token=%SONAR_TOKEN%'
+                    sh 'npx sonar-scanner -Dsonar.token=$SONAR_TOKEN'
                 }
             }
         }
@@ -76,15 +76,24 @@ pipeline {
             steps {
                 echo 'Running npm audit and Trivy security scans...'
 
-                bat 'npm audit --audit-level=high > npm-audit-report.txt'
+                sh 'npm audit --audit-level=high > npm-audit-report.txt'
 
-                bat '''
-                docker run --rm -v "%cd%:/project" aquasec/trivy fs --severity HIGH,CRITICAL --format table -o /project/trivy-filesystem-report.txt /project
+                sh '''
+                    docker run --rm -v "$PWD:/project" aquasec/trivy fs \
+                    --severity HIGH,CRITICAL \
+                    --format table \
+                    -o /project/trivy-filesystem-report.txt \
+                    /project
                 '''
 
-                bat '''
-                docker save %IMAGE_REPO%:%IMAGE_TAG% -o portfolio-image.tar
-                docker run --rm -v "%cd%:/project" aquasec/trivy image --input /project/portfolio-image.tar --severity HIGH,CRITICAL --format table -o /project/trivy-image-report.txt
+                sh '''
+                    docker save $IMAGE_REPO:$IMAGE_TAG -o portfolio-image.tar
+
+                    docker run --rm -v "$PWD:/project" aquasec/trivy image \
+                    --input /project/portfolio-image.tar \
+                    --severity HIGH,CRITICAL \
+                    --format table \
+                    -o /project/trivy-image-report.txt
                 '''
             }
             post {
@@ -99,17 +108,15 @@ pipeline {
                 echo 'Deploying application to local staging container...'
 
                 withCredentials([string(credentialsId: 'staging-session-secret', variable: 'SESSION_SECRET')]) {
-                    bat '''
-                    set IMAGE_REPO=%IMAGE_REPO%
-                    set IMAGE_TAG=%IMAGE_TAG%
-                    set SESSION_SECRET=%SESSION_SECRET%
+                    sh '''
+                        docker compose -f docker-compose.staging.yml down || true
 
-                    docker compose -f docker-compose.staging.yml down
-                    docker compose -f docker-compose.staging.yml up -d
+                        IMAGE_REPO=$IMAGE_REPO IMAGE_TAG=$IMAGE_TAG SESSION_SECRET=$SESSION_SECRET \
+                        docker compose -f docker-compose.staging.yml up -d
 
-                    timeout /t 15 /nobreak
+                        sleep 15
 
-                    curl -f http://localhost:%STAGING_PORT%/health
+                        curl -f http://localhost:$STAGING_PORT/health
                     '''
                 }
             }
@@ -123,14 +130,19 @@ pipeline {
                     string(credentialsId: 'prod-session-secret', variable: 'PROD_SESSION_SECRET')
                 ]) {
                     sshagent(credentials: ['azure-ssh-key']) {
-                        bat '''
-                        ssh -o StrictHostKeyChecking=no %AZURE_USER%@%AZURE_HOST% "mkdir -p /opt/sit753-portfolio"
+                        sh '''
+                            ssh -o StrictHostKeyChecking=no $AZURE_USER@$AZURE_HOST "mkdir -p /opt/sit753-portfolio"
 
-                        scp -o StrictHostKeyChecking=no docker-compose.prod.yml prometheus.yml alert.rules.yml %AZURE_USER%@%AZURE_HOST%:/opt/sit753-portfolio/
+                            scp -o StrictHostKeyChecking=no docker-compose.prod.yml prometheus.yml alert.rules.yml \
+                            $AZURE_USER@$AZURE_HOST:/opt/sit753-portfolio/
 
-                        ssh -o StrictHostKeyChecking=no %AZURE_USER%@%AZURE_HOST% "cd /opt/sit753-portfolio && IMAGE_REPO=%IMAGE_REPO% IMAGE_TAG=%IMAGE_TAG% SESSION_SECRET=%PROD_SESSION_SECRET% docker compose -f docker-compose.prod.yml pull"
-
-                        ssh -o StrictHostKeyChecking=no %AZURE_USER%@%AZURE_HOST% "cd /opt/sit753-portfolio && IMAGE_REPO=%IMAGE_REPO% IMAGE_TAG=%IMAGE_TAG% SESSION_SECRET=%PROD_SESSION_SECRET% docker compose -f docker-compose.prod.yml up -d"
+                            ssh -o StrictHostKeyChecking=no $AZURE_USER@$AZURE_HOST "
+                                cd /opt/sit753-portfolio &&
+                                IMAGE_REPO=$IMAGE_REPO IMAGE_TAG=$IMAGE_TAG SESSION_SECRET=$PROD_SESSION_SECRET \
+                                docker compose -f docker-compose.prod.yml pull &&
+                                IMAGE_REPO=$IMAGE_REPO IMAGE_TAG=$IMAGE_TAG SESSION_SECRET=$PROD_SESSION_SECRET \
+                                docker compose -f docker-compose.prod.yml up -d
+                            "
                         '''
                     }
                 }
@@ -141,12 +153,12 @@ pipeline {
             steps {
                 echo 'Verifying production health, metrics and Prometheus availability...'
 
-                bat '''
-                timeout /t 20 /nobreak
+                sh '''
+                    sleep 20
 
-                curl -f http://%AZURE_HOST%:%PROD_PORT%/health
-                curl -f http://%AZURE_HOST%:%PROD_PORT%/metrics
-                curl -f http://%AZURE_HOST%:9090/-/healthy
+                    curl -f http://$AZURE_HOST:$PROD_PORT/health
+                    curl -f http://$AZURE_HOST:$PROD_PORT/metrics
+                    curl -f http://$AZURE_HOST:9090/-/healthy
                 '''
             }
         }
