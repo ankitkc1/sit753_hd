@@ -13,6 +13,13 @@ const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
+// view + static
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+
+
 const helmet = require('helmet');
 const client = require('prom-client');
 
@@ -52,11 +59,7 @@ app.get('/metrics', async (req, res) => {
   res.end(await register.metrics());
 });
 
-// view + static
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+
 
 // parsers
 app.use(express.urlencoded({ extended: true }));
