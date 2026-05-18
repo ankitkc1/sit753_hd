@@ -30,6 +30,9 @@ describe('Application health endpoint', () => {
     expect(csp).toContain('frame-src');
     expect(csp).toContain('https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app');
     expect(csp).toContain('https://*.streamlit.app');
+    expect(csp).toContain('https://fonts.googleapis.com');
+    expect(csp).toContain('https://fonts.gstatic.com');
+    expect(csp).toContain('https://cdnjs.cloudflare.com');
     expect(csp).not.toContain('upgrade-insecure-requests');
   });
 });

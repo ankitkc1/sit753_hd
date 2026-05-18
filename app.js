@@ -9,35 +9,6 @@ const methodOverride = require('method-override');
 const helmet = require('helmet');
 const client = require('prom-client');
 
-const app = express();
-
-app.use(
-  helmet({
-    contentSecurityPolicy: {
-      useDefaults: true,
-      directives: {
-        "upgrade-insecure-requests": null,
-        "frame-src": [
-          "'self'",
-          "https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app",
-          "https://*.streamlit.app"
-        ],
-        "script-src": ["'self'", "'unsafe-inline'"],
-        "style-src": ["'self'", "'unsafe-inline'"],
-        "img-src": ["'self'", "data:", "https:"]
-      }
-    },
-    crossOriginOpenerPolicy: false,
-    originAgentCluster: false
-  })
-);
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
-
 dotenv.config();
 
 const DEFAULT_STREAMLIT_URL = 'https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app';
@@ -62,6 +33,36 @@ function getStreamlitEmbedUrl() {
   embedUrl.searchParams.append('embed_options', 'light_theme');
   return embedUrl.toString();
 }
+
+const app = express();
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        "upgrade-insecure-requests": null,
+        "frame-src": [
+          "'self'",
+          getStreamlitOrigin(),
+          "https://*.streamlit.app"
+        ],
+        "script-src": ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+        "style-src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
+        "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
+        "img-src": ["'self'", "data:", "https:"]
+      }
+    },
+    crossOriginOpenerPolicy: false,
+    originAgentCluster: false
+  })
+);
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 const blogRoutes = require('./routes/blogRoutes');
 const adminRoutes = require('./routes/adminRoutes');
