@@ -6,6 +6,36 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const { MongoStore } = require('connect-mongo');
 const methodOverride = require('method-override');
+const helmet = require('helmet');
+const client = require('prom-client');
+
+const app = express();
+
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      useDefaults: true,
+      directives: {
+        "upgrade-insecure-requests": null,
+        "frame-src": [
+          "'self'",
+          "https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app"
+        ],
+        "script-src": ["'self'", "'unsafe-inline'"],
+        "style-src": ["'self'", "'unsafe-inline'"],
+        "img-src": ["'self'", "data:", "https:"]
+      }
+    },
+    crossOriginOpenerPolicy: false,
+    originAgentCluster: false
+  })
+);
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 
 dotenv.config();
 
@@ -35,27 +65,6 @@ function getStreamlitEmbedUrl() {
 const blogRoutes = require('./routes/blogRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 
-const app = express();
-
-// view + static
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
-
-
-const helmet = require('helmet');
-const client = require('prom-client');
-
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      frameSrc: ["'self'", getStreamlitOrigin(), 'https://*.streamlit.app'],
-      imgSrc: ["'self'", 'data:', 'https:'],
-      upgradeInsecureRequests: null,
-    },
-  },
-}));
 
 const register = new client.Registry();
 
@@ -138,6 +147,7 @@ app.get("/", (req, res) => {
 });
 
 app.get('/project', (req, res) => res.render('project.ejs', { activePage: 'project' }));
+app.get('/projects', (req, res) => res.render('project.ejs', { activePage: 'project' }));
 app.get('/research', (req, res) => res.render('research.ejs', { activePage: 'research' }));
 app.get('/contact', (req, res) => res.render('contact.ejs', { activePage: 'contact' }));
 
