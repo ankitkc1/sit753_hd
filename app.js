@@ -19,7 +19,8 @@ app.use(
         "upgrade-insecure-requests": null,
         "frame-src": [
           "'self'",
-          "https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app"
+          "https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app",
+          "https://*.streamlit.app"
         ],
         "script-src": ["'self'", "'unsafe-inline'"],
         "style-src": ["'self'", "'unsafe-inline'"],
