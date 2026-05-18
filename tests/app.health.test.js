@@ -19,4 +19,17 @@ describe('Application health endpoint', () => {
     expect(response.statusCode).toBe(200);
     expect(response.text).toContain('http_requests_total');
   });
+
+  test('GET / allows the Streamlit chatbot iframe through CSP', async () => {
+    const response = await request(app).get('/');
+
+    expect(response.statusCode).toBe(200);
+    expect(response.text).toContain('src="https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app/?embed=true');
+
+    const csp = response.headers['content-security-policy'];
+    expect(csp).toContain('frame-src');
+    expect(csp).toContain('https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app');
+    expect(csp).toContain('https://*.streamlit.app');
+    expect(csp).not.toContain('upgrade-insecure-requests');
+  });
 });

@@ -14,12 +14,15 @@ services:
       - mongo-staging
     ports:
       - "3501:3500"
+    volumes:
+      - app-staging-uploads:/app/public/uploads
     environment:
       NODE_ENV: staging
       PORT: 3500
-      MONGODB_URI: mongodb://mongo-staging:27017/portfolio_staging
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo-staging:27017/portfolio_staging}
       SESSION_SECRET: ${SESSION_SECRET}
       STREAMLIT_URL: ${STREAMLIT_URL:-https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app}
 
 volumes:
   mongo-staging-data:
+  app-staging-uploads:

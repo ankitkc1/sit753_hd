@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const { URL } = require('url');
 //const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const session = require('express-session');
@@ -7,6 +8,29 @@ const { MongoStore } = require('connect-mongo');
 const methodOverride = require('method-override');
 
 dotenv.config();
+
+const DEFAULT_STREAMLIT_URL = 'https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app';
+
+function getStreamlitUrl() {
+  try {
+    return new URL(process.env.STREAMLIT_URL || DEFAULT_STREAMLIT_URL).toString();
+  } catch {
+    return DEFAULT_STREAMLIT_URL;
+  }
+}
+
+function getStreamlitOrigin() {
+  return new URL(getStreamlitUrl()).origin;
+}
+
+function getStreamlitEmbedUrl() {
+  const embedUrl = new URL(getStreamlitUrl());
+  embedUrl.searchParams.set('embed', 'true');
+  embedUrl.searchParams.append('embed_options', 'hide_loading_screen');
+  embedUrl.searchParams.append('embed_options', 'disable_scrolling');
+  embedUrl.searchParams.append('embed_options', 'light_theme');
+  return embedUrl.toString();
+}
 
 const blogRoutes = require('./routes/blogRoutes');
 const adminRoutes = require('./routes/adminRoutes');
@@ -23,7 +47,15 @@ app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
 const helmet = require('helmet');
 const client = require('prom-client');
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      frameSrc: ["'self'", getStreamlitOrigin(), 'https://*.streamlit.app'],
+      imgSrc: ["'self'", 'data:', 'https:'],
+      upgradeInsecureRequests: null,
+    },
+  },
+}));
 
 const register = new client.Registry();
 
@@ -97,8 +129,11 @@ app.use((req, res, next) => {
 
 // routes
 app.get("/", (req, res) => {
+  const streamlitUrl = getStreamlitUrl();
   res.render("main", {
-    streamlitUrl: process.env.STREAMLIT_URL || "https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app"
+    activePage: 'home',
+    streamlitUrl,
+    streamlitEmbedUrl: getStreamlitEmbedUrl()
   });
 });
 

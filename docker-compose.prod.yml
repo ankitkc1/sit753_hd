@@ -14,10 +14,12 @@ services:
       - mongo-prod
     ports:
       - "3500:3500"
+    volumes:
+      - app-prod-uploads:/app/public/uploads
     environment:
       NODE_ENV: production
       PORT: 3500
-      MONGODB_URI: mongodb://mongo-prod:27017/portfolio_prod
+      MONGODB_URI: ${MONGODB_URI:-mongodb://mongo-prod:27017/portfolio_prod}
       SESSION_SECRET: ${SESSION_SECRET}
       STREAMLIT_URL: ${STREAMLIT_URL:-https://m5thmmx6jbrrmb9ytxhqhm.streamlit.app}
 
@@ -35,3 +37,4 @@ services:
 
 volumes:
   mongo-prod-data:
+  app-prod-uploads:
